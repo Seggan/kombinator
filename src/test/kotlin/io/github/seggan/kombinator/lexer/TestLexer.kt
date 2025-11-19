@@ -1,0 +1,55 @@
+package io.github.seggan.kombinator.lexer
+
+@Suppress("unused")
+object TestLexer : Lexer<TestTokenType>() {
+
+    private val whitespace by regex("""\s+""", TestTokenType.WHITESPACE)
+
+    private val comment by regex("""//.*""", TestTokenType.COMMENT)
+    private val blockComment by regex("""/\*.*?\*/""", TestTokenType.COMMENT, RegexOption.DOT_MATCHES_ALL)
+
+    private val identifier by regex("""[a-zA-Z_][a-zA-Z0-9_]*""", TestTokenType.IDENTIFIER)
+    private val number by regex("""\d+(\.\d+)?""", TestTokenType.NUMBER)
+
+    private val openParenthesis by literal("(", TestTokenType.OPEN_PARENTHESIS)
+    private val closeParenthesis by literal(")", TestTokenType.CLOSE_PARENTHESIS)
+    private val openBrace by literal("{", TestTokenType.OPEN_BRACE)
+    private val closeBrace by literal("}", TestTokenType.CLOSE_BRACE)
+    private val openBracket by literal("[", TestTokenType.OPEN_BRACKET)
+    private val closeBracket by literal("]", TestTokenType.CLOSE_BRACKET)
+
+    private val comma by literal(",", TestTokenType.COMMA)
+    private val semicolon by literal(";", TestTokenType.SEMICOLON)
+    private val colon by literal(":", TestTokenType.COLON)
+    private val singleEquals by literal("=", TestTokenType.SINGLE_EQUALS)
+    private val doubleEquals by literal("==", TestTokenType.DOUBLE_EQUALS)
+    private val notEquals by literal("!=", TestTokenType.NOT_EQUALS)
+    private val lessThan by literal("<", TestTokenType.LESS_THAN)
+    private val greaterThan by literal(">", TestTokenType.GREATER_THAN)
+    private val lessThanOrEqual by literal("<=", TestTokenType.LESS_THAN_OR_EQUAL)
+    private val greaterThanOrEqual by literal(">=", TestTokenType.GREATER_THAN_OR_EQUAL)
+    private val plus by literal("+", TestTokenType.PLUS)
+    private val minus by literal("-", TestTokenType.MINUS)
+    private val star by literal("*", TestTokenType.STAR)
+    private val slash by literal("/", TestTokenType.SLASH)
+    private val percent by literal("%", TestTokenType.PERCENT)
+    private val exclamation by literal("!", TestTokenType.EXCLAMATION)
+    private val ampersand by literal("&", TestTokenType.AMPERSAND)
+    private val pipe by literal("|", TestTokenType.PIPE)
+    private val caret by literal("^", TestTokenType.CARET)
+    private val tilde by literal("~", TestTokenType.TILDE)
+
+    private val funKeyword by literal("fun", TestTokenType.FUN)
+    private val returnKeyword by literal("return", TestTokenType.RETURN)
+    private val ifKeyword by literal("if", TestTokenType.IF)
+    private val elseKeyword by literal("else", TestTokenType.ELSE)
+    private val whileKeyword by literal("while", TestTokenType.WHILE)
+    private val forKeyword by literal("for", TestTokenType.FOR)
+    private val breakKeyword by literal("break", TestTokenType.BREAK)
+    private val continueKeyword by literal("continue", TestTokenType.CONTINUE)
+    private val trueKeyword by literal("true", TestTokenType.TRUE)
+    private val falseKeyword by literal("false", TestTokenType.FALSE)
+    private val nullKeyword by literal("null", TestTokenType.NULL)
+    private val letKeyword by literal("let", TestTokenType.LET)
+    private val mutKeyword by literal("mut", TestTokenType.MUT)
+}
