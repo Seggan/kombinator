@@ -2,13 +2,22 @@
 
 package io.github.seggan.kombinator.parser
 
+import io.github.seggan.kombinator.lexer.Token
+
 fun interface ParserNode<TokenType : Any, out AstType> {
     fun parse(ctx: ParseContext<TokenType>): AstType
 }
 
+data class NodeSpan<TokenType : Any>(val startToken: Token<TokenType>, val endToken: Token<TokenType>)
+
 inline infix fun <TokenType : Any, AstType1, AstType2> ParserNode<TokenType, AstType1>.map(
-    crossinline transform: (AstType1) -> AstType2
-) = ParserNode { ctx -> transform(this@map.parse(ctx)) }
+    crossinline transform: NodeSpan<TokenType>.(AstType1) -> AstType2
+) = ParserNode { ctx ->
+    val startToken = ctx.tokens[ctx.index]
+    val result = this@map.parse(ctx)
+    val span = NodeSpan(startToken, ctx.tokens[ctx.index - 1])
+    span.transform(result)
+}
 
 inline infix fun <TokenType : Any, AstType> ParserNode<TokenType, Iterable<AstType>>.reduce(
     crossinline reduction: (acc: AstType, AstType) -> AstType

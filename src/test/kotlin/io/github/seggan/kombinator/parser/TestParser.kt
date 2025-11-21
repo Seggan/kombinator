@@ -31,7 +31,7 @@ object TestParser : Parser<TestTokenType, TestAst.File>() {
     private val expression: ParserNode<TestTokenType, TestAst.Expression> by booleanExpression
 
     private val variableDeclaration by -TestLexer.LET then
-            (optional(TestLexer.MUT) map { it != null }) then
+            optional(TestLexer.MUT) map { it != null } then
             (identifier named "variable name") then
             optional(-TestLexer.COLON then identifier named "variable type") then
             -TestLexer.SINGLE_EQUALS then
