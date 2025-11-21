@@ -11,6 +11,8 @@ abstract class Lexer<TokenType : Any> {
 
     open val errorToken: TokenType? = null
 
+    abstract val eofToken: TokenType
+
     private val matchers = mutableSetOf<TokenMatcher<TokenType>>()
 
     fun lex(source: CodeSource): List<Token<TokenType>> {
@@ -49,7 +51,10 @@ abstract class Lexer<TokenType : Any> {
                 pos++
             }
         }
-        return tokens
+        return tokens + Token(
+            type = eofToken,
+            span = Span(pos, pos, source)
+        )
     }
 
     private inner class TokenMatcherProvider(private val matcher: TokenMatcher<TokenType>) :

@@ -6,8 +6,8 @@ import kotlin.test.assertEquals
 
 object LexerTest {
 
-    private val CODE = """
-        fun main(args: String[]): Int {
+    val CODE = """
+        fun main(arg: String): Int {
             // This is a comment
             /*
              This is a block comment
@@ -31,7 +31,7 @@ object LexerTest {
             tokens,
             // @formatter:off
             listOf(
-                TestTokenType.FUN, TestTokenType.IDENTIFIER, TestTokenType.OPEN_PARENTHESIS, TestTokenType.IDENTIFIER, TestTokenType.COLON, TestTokenType.IDENTIFIER, TestTokenType.OPEN_BRACKET, TestTokenType.CLOSE_BRACKET, TestTokenType.CLOSE_PARENTHESIS, TestTokenType.COLON, TestTokenType.IDENTIFIER, TestTokenType.OPEN_BRACE,
+                TestTokenType.FUN, TestTokenType.IDENTIFIER, TestTokenType.OPEN_PARENTHESIS, TestTokenType.IDENTIFIER, TestTokenType.COLON, TestTokenType.IDENTIFIER, TestTokenType.CLOSE_PARENTHESIS, TestTokenType.COLON, TestTokenType.IDENTIFIER, TestTokenType.OPEN_BRACE,
                 TestTokenType.COMMENT,
                 TestTokenType.COMMENT,
                 TestTokenType.LET, TestTokenType.MUT, TestTokenType.IDENTIFIER, TestTokenType.SINGLE_EQUALS, TestTokenType.NUMBER, TestTokenType.SEMICOLON,

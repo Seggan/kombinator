@@ -1,10 +1,27 @@
 package io.github.seggan.kombinator.lexer
 
-interface TokenMatcher<TokenType : Any> {
+import io.github.seggan.kombinator.parser.ParseContext
+import io.github.seggan.kombinator.parser.ParserNode
+import io.github.seggan.kombinator.parser.ParsingError
+
+interface TokenMatcher<TokenType : Any> : ParserNode<TokenType, Token<TokenType>> {
 
     val type: TokenType
 
     fun match(input: CharSequence): Int
+
+    override fun parse(ctx: ParseContext<TokenType>): Token<TokenType> {
+        val token = ctx.tokens[ctx.index]
+        if (token.type != type) {
+            ctx.error(ParsingError(
+                found = token.type,
+                expected = setOf(type),
+                span = token.span
+            ))
+        }
+        ctx.index++
+        return token
+    }
 
     class Literal<T : Any>(override val type: T, private val literal: String) : TokenMatcher<T> {
         override fun match(input: CharSequence): Int {
