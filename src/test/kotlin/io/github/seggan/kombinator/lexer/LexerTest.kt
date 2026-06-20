@@ -28,7 +28,6 @@ object LexerTest {
             .map { it.type }
             .filterNot { it == TestTokenType.WHITESPACE }
         assertEquals(
-            tokens,
             // @formatter:off
             listOf(
                 TestTokenType.FUN, TestTokenType.IDENTIFIER, TestTokenType.OPEN_PARENTHESIS, TestTokenType.IDENTIFIER, TestTokenType.COLON, TestTokenType.IDENTIFIER, TestTokenType.CLOSE_PARENTHESIS, TestTokenType.COLON, TestTokenType.IDENTIFIER, TestTokenType.OPEN_BRACE,
@@ -41,9 +40,11 @@ object LexerTest {
                 TestTokenType.CLOSE_BRACE, TestTokenType.ELSE, TestTokenType.OPEN_BRACE,
                 TestTokenType.RETURN, TestTokenType.IDENTIFIER, TestTokenType.MINUS, TestTokenType.NUMBER, TestTokenType.SEMICOLON,
                 TestTokenType.CLOSE_BRACE,
-                TestTokenType.CLOSE_BRACE
-            )
+                TestTokenType.CLOSE_BRACE,
+                TestTokenType.EOF
+            ),
             // @formatter:on
+            tokens
         )
     }
 }

@@ -2,6 +2,7 @@ package io.github.seggan.kombinator.lexer
 
 import io.github.seggan.kombinator.CodeSource
 import io.github.seggan.kombinator.Span
+import io.github.seggan.kombinator.StringView
 import org.intellij.lang.annotations.Language
 import kotlin.properties.PropertyDelegateProvider
 import kotlin.properties.ReadOnlyProperty
@@ -16,13 +17,13 @@ abstract class Lexer<TokenType : Any> {
     private val matchers = mutableSetOf<TokenMatcher<TokenType>>()
 
     fun lex(source: CodeSource): List<Token<TokenType>> {
-        val builder = StringBuilder(source.text)
+        var code: CharSequence = StringView(source.text)
         val tokens = mutableListOf<Token<TokenType>>()
         var pos = 0
-        while (builder.isNotEmpty()) {
+        while (code.isNotEmpty()) {
             var longestMatch: Token<TokenType>? = null
             for (matcher in matchers) {
-                val matchLength = matcher.match(builder)
+                val matchLength = matcher.match(code)
                 if (matchLength != 0 && (longestMatch == null || matchLength >= longestMatch.span.length)) {
                     longestMatch = Token(
                         matcher.type,
@@ -32,11 +33,12 @@ abstract class Lexer<TokenType : Any> {
             }
             if (longestMatch != null) {
                 tokens.add(longestMatch)
-                builder.delete(0, longestMatch.span.length)
-                pos += longestMatch.span.length
+                val length = longestMatch.span.length
+                code = code.drop(length)
+                pos += length
             } else if (errorToken == null) {
                 throw LexException(
-                    "Unexpected character: '${builder[0]}'",
+                    "Unexpected character: '${code[0]}'",
                     Span(pos, pos + 1, source)
                 )
             } else {
@@ -47,7 +49,7 @@ abstract class Lexer<TokenType : Any> {
                         span = Span(pos, pos + 1, source)
                     )
                 )
-                builder.deleteCharAt(0)
+                code = code.drop(1)
                 pos++
             }
         }
