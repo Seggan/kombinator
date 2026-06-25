@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.2.20"
+    `maven-publish`
 }
 
 group = "io.github.seggan"
@@ -30,6 +31,20 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
+}
+
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["kotlin"])
+            artifact(sourcesJar.get())
+        }
+    }
 }
 
 val maxArity = 32

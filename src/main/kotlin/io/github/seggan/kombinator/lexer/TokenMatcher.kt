@@ -29,10 +29,10 @@ interface TokenMatcher<TokenType : Any> : ParserNode<TokenType, Token<TokenType>
         }
     }
 
-    class Regex<T : Any>(override val type: T, pattern: kotlin.text.Regex) : TokenMatcher<T> {
-        private val pattern = "^${pattern.pattern}".toRegex(pattern.options)
+    class Regex<T : Any>(override val type: T, val pattern: kotlin.text.Regex) : TokenMatcher<T> {
         override fun match(input: CharSequence): Int {
-            return pattern.find(input)?.value?.length ?: 0
+            val range = pattern.matchAt(input, 0)?.range ?: return 0
+            return range.last - range.first + 1
         }
     }
 
