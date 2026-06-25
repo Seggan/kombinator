@@ -44,10 +44,17 @@ abstract class Parser<TokenType : Any, AstType> {
                     span = err.span
                 )
             }
-        return ParseException(
-            message = "Expected ${error.expected.joinToString(" or ")}, but found ${error.found}",
-            span = error.span
-        )
+        return if (error.found == eofToken) {
+            ParseException(
+                message = "Unexpected end of input, expected ${error.expected.joinToString(" or ")}",
+                span = error.span
+            )
+        } else {
+            ParseException(
+                message = "Expected ${error.expected.joinToString(" or ")}, but found ${error.found}",
+                span = error.span
+            )
+        }
     }
 
     protected inline fun <AstType> ref(crossinline block: () -> ParserNode<TokenType, AstType>) =
